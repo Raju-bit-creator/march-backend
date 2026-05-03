@@ -1,8 +1,10 @@
 const express = require("express");
 const { chats } = require("./data/data");
+const dbConnect = require("./config/db");
 
 const app = express();
-
+dbConnect();
+app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
@@ -22,6 +24,8 @@ app.get("/chats/:id", (req, res) => {
     res.status(404).send("Chat not found");
   }
 });
+
+app.use("/api/auth", require("./routes/Auth"));
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
