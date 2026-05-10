@@ -1,34 +1,15 @@
 const express = require("express");
-const User = require("../model/User");
 const router = express.Router();
 
-// @route   POST api/auth/login
-// @desc    Login user
-// @access  Public
-router.post("/login", (req, res) => {
-  // Here you would normally handle authentication logic
-  res.json({ message: "Login successful" });
-});
+const { loginUser, createUser } = require("../controllers/userController");
 
-router.post("/createuser", async (req, res) => {
-  try {
-    let user = await User.findOne({ email: req.body.email });
-    if (user) {
-      return res.status(400).json({ error: "User already exists" });
-    }
-    console.log(req.body);
+// Login Route
+router.post("/login", loginUser);
 
-    user = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
+// Create User Route
+router.post("/createuser", createUser);
 
-    res.json({ message: "User created successfully" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// Get User Details Route
+// router.get("/getuser", getUserDetails);
 
 module.exports = router;

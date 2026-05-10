@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const { chats } = require("./data/data");
 const dbConnect = require("./config/db");
 
 const app = express();
 dbConnect();
+app.use(cors());
 app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello World");
