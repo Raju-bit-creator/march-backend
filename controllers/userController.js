@@ -88,19 +88,22 @@ const createUser = [
   },
 ];
 
-// get user details endpoint can be implemented here
-// const getUserDetails = async (req, res) => {
-//   try {
-//     const user = await User.findById(req.user.id).select("-password");
-//     res.json(user);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Internal Server Error");
-//   }
-// };
+// @route   GET api/auth/getuser
+// @desc    Get user details (Protected)
+// @access  Private
+const getUserDetails = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).select("-password");
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 module.exports = {
   loginUser,
   createUser,
-  // getUserDetails,
+  getUserDetails,
 };

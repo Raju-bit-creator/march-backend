@@ -28,6 +28,7 @@ app.get("/chats/:id", (req, res) => {
 });
 
 app.use("/api/auth", require("./routes/Auth"));
+app.use("/api/products", require("./routes/Product"));
 
 app.listen(3000, () => {
   console.log("Server is running on http://localhost:3000");
