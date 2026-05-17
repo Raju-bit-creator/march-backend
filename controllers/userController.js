@@ -8,31 +8,49 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // @route   POST api/auth/login
 // @desc    Login user
 // @access  Public
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({
-        error: "Invalid credentials",
-      });
+const loginUser = [
+  body("email").isEmail().withMessage("Invalid email").normalizeEmail(),
+  body("password")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    if (user.password !== password) {
-      return res.status(400).json({
-        error: "Invalid credentials",
-      });
-    }
+    try {
+      const { email, password } = req.body;
 
-    res.json({
-      message: "Login successful",
-    });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-};
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({
+          error: "Invalid credentials",
+        });
+      }
+
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        return res.status(400).json({
+          error: "Invalid credentials",
+        });
+      }
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      var authToken = jwt.sign(data, JWT_SECRET, { expiresIn: "1h" });
+
+      res
+        .status(201)
+        .json({ success: true, message: "login successfull", user, authToken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  },
+];
 
 // @route   POST api/auth/createuser
 // @desc    Create new user
@@ -77,8 +95,15 @@ const createUser = [
         expiresIn: "1h",
       });
 
+      const data = {
+        user: {
+          id: user._id,
+        },
+      };
+
       res.json({
         message: "User created successfully",
+        data,
         token,
       });
     } catch (error) {
