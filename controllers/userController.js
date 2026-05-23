@@ -43,7 +43,7 @@ const loginUser = [
       var authToken = jwt.sign(data, JWT_SECRET, { expiresIn: "1h" });
 
       res
-        .status(201)
+        .status(200)
         .json({ success: true, message: "login successfull", user, authToken });
     } catch (error) {
       console.error(error.message);

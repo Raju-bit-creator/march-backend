@@ -29,9 +29,13 @@ const createProduct = [
     try {
       const { name, description, price, category, instock } = req.body;
 
+      console.log("frontend request", req.body); //
+
       if (!name || !description || !price) {
         return res.status(400).json({ error: "Please fill all the fields" });
       }
+
+      let image = req.file ? req.file.filename : "";
 
       const newProduct = new Product({
         name,
@@ -39,6 +43,7 @@ const createProduct = [
         price,
         category,
         instock,
+        image,
         user: req.user.id,
       });
 
