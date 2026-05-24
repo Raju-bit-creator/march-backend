@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { chats } = require("./data/data");
 const dbConnect = require("./config/db");
+const path = require("path");
 
 const app = express();
 dbConnect();
@@ -26,6 +27,8 @@ app.get("/chats/:id", (req, res) => {
     res.status(404).send("Chat not found");
   }
 });
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", require("./routes/Auth"));
 app.use("/api/products", require("./routes/Product"));

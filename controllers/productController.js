@@ -79,7 +79,7 @@ const editMyProduct = async (req, res) => {
     product = await Product.findByIdAndUpdate(
       req.params.id,
       { $set: newProduct },
-      { new: true },
+      { returnDocument: "after" },
     );
     res.json(product);
   } catch (error) {
