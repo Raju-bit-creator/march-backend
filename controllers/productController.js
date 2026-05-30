@@ -6,8 +6,16 @@ const Product = require("../model/Product");
 // controllers/productController.js
 
 const getAllProducts = async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
+  try {
+    const searchQuery = req.query.searchQuery
+      ? {
+          name: { $regex: req.query.searchQuery, $options: "i" },
+        }
+      : {};
+
+    const products = await Product.find(searchQuery);
+    res.json(products);
+  } catch (error) {}
 };
 const getMyProducts = async (req, res) => {
   const products = await Product.find({ user: req.user.id });
