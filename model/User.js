@@ -15,6 +15,9 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  // 2FA fields
+  otp: { type: String },
+  otpExpiresAt: { type: Date },
 });
 
 const User = mongoose.model("User", userSchema);

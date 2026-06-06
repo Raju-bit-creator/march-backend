@@ -7,11 +7,14 @@ const {
   getUserDetails,
   forgetPassword,
   resetPassword,
+  verifyOtp,
 } = require("../controllers/userController");
 const fetchUser = require("../middleware/FetchUser");
 
 // Login Route
 router.post("/login", loginUser);
+
+router.post("/verify-otp", verifyOtp);
 
 // Create User Route
 router.post("/createuser", createUser);
