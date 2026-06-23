@@ -9,7 +9,7 @@ dbConnect();
 app.use(cors());
 app.use(express.json());
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Hello this is my first deployement of backend project");
 });
 app.get("/about", (req, res) => {
   res.send("welcome to about page of techyvercity");
